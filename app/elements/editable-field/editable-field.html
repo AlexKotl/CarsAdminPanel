@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../elements/api-request/api-request.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="editable-field">
+  <template>
+    <style>
+      :host {
+        
+      }
+
+    </style>
+    
+    <api-request
+    	id='api'
+      act="cars/edit_field/{{carid}}?field_name=[[name]]&field_value={{value}}"
+      response="{{ajaxResponse}}">    
+    </api-request>
+  	
+  	<paper-input value='{{value}}' name='[[name]]' label='[[title]]' on-change='updateValue'></paper-input>
+  	
+  	<paper-toast id="toast" text="Car field updated"></paper-toast>
+    
+  </template>
+
+  <script>
+    (function() {            
+
+      Polymer({
+        is: 'editable-field',
+
+        properties: {
+          name: String,
+          value: String,
+          carid: String,
+          title: String
+        },
+        
+        updateValue: function(e) {
+          this.$.api.run();
+        },
+        
+        ajaxResponse: function(r) {
+	        this.$.toast.open();
+        }
+
+         
+      });
+    })();
+  </script>
+</dom-module>

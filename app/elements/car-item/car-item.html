@@ -1,0 +1,112 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<!-- <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html"> -->
+<link rel="import" href="../../elements/api-request/api-request.html">
+
+<dom-module id="car-item">
+  <template>
+  	<link rel="import" href="../../styles/denim.css" type="css">
+    <style>
+      :host {
+        
+      }
+      
+      paper-card {
+        --paper-card:{
+          margin:10px 10px 10px 0; width: 220px;
+        }
+        --paper-card-header:{overflow: hidden; height: 3em;}
+      }
+
+    </style>
+
+  	<paper-card heading="[[title]]" id='card'  >
+  		<div class="card-content">
+  			<iron-image placeholder='./images/loading.gif' src="[[image]]" width="190" height="100" sizing="cover" preload fade></iron-image>
+  		</div>
+  		<div class="card-actions">
+  			<a href='/cars/[[carid]]'><paper-button id='edit' class='primary' primary='primary' on-tap="editCar____">Edit</paper-button></a>
+  			<paper-button id='delete_but' class='error' error>Delete</paper-button>
+  		</div>
+  	</paper-card>
+  	
+  	<paper-toast id="toast" text="This toast auto-closes after 3 seconds"></paper-toast>
+  	
+  	<api-request
+  	  id='api'
+  	  on-response="hresponse">
+  	</api-request>
+<!--
+  	<iron-ajax
+      id="ajax"
+      url=""
+      handle-as="json"
+      on-response="hresponse"
+      debounce-duration="300">
+    </iron-ajax>
+-->
+    
+    <paper-dialog id='delete_dialog' >
+      <h2>Confirm action</h2>
+        <p>Are you sure you want to remove this car?</p>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm id='delete'>Delete</paper-button>
+      </div>
+    </paper-dialog>
+	
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'car-item',
+
+        properties: {
+          title: String,
+          image: String,
+          carid: String
+        },
+        
+        listeners: {
+	        'delete.tap': 'deleteItem',
+	        'delete_but.tap': 'deleteDialog'
+        },
+        
+        deleteItem: function() {
+/*
+          this.$.ajax.url = "http://cars/api/cars/delete/" + this.carid;
+          this.$.ajax.generateRequest();
+*/
+          this.$.api.act = "cars/delete/" + this.carid;
+          this.$.api.run();
+	        
+	        
+        },
+        
+        hresponse: function(request) {
+          //console.log(request.detail);
+          this.$.toast.text = request.detail.message;
+          this.$.toast.open();
+          if (request.detail.action == 'delete') this.$.card.remove();
+        },
+        
+        deleteDialog: function() {
+          this.$.delete_dialog.toggle();
+        },
+        
+        editCar: function() {
+	        //alert('sd');
+	        location.href = '/cars/' + this.carid;
+        }
+
+        
+      });
+    })();
+  </script>
+</dom-module>

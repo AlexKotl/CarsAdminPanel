@@ -1,0 +1,28 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="button-exit">
+  <template>
+    <paper-icon-button icon="launch" id='exitButton' on-tap='exitAction'></paper-icon-button>
+  </template>
+
+  <script>
+    (function() {
+      
+      Polymer({
+        is: 'button-exit',
+
+        properties: {
+
+        },
+        
+        exitAction: function() {
+          //alert("Actually I'm not checking your credentials, but I will let you in, " + login.value);
+          alert('See you soon...');
+          localStorage.removeItem('token');
+          app.route = 'login';
+        }
+      });
+    })();
+  </script>
+</dom-module>

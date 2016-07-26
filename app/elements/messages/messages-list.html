@@ -1,0 +1,37 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/api-request/api-request.html">
+<link rel="import" href="../../elements/messages/messages-item.html">
+
+<dom-module id="messages-list">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+
+    <api-request 
+      id='api'
+      act='messages/list' 
+      response='{{ajaxResponse}}'>
+    </api-request>
+   
+    <template is="dom-repeat" items="[[ajaxResponse]]">
+    	<messages-item content="[[item.content]]" email="[[item.email]]" phone="[[item.phone]]"  name="[[item.name]]"  date="[[item.date]]" vehicle="[[item.vehicle]]" carid="[[item.carid]]"></messages-item>
+    </template>
+    
+  </template>
+
+  <script>
+    (function() {
+      
+      Polymer({
+        is: 'messages-list',
+
+        properties: {
+
+        }
+        
+        
+      });
+    })();
+  </script>
+</dom-module>

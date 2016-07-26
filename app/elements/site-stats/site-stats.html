@@ -1,0 +1,28 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/api-request/api-chart.html">
+
+
+<dom-module id="site-stats">
+	<link rel="import" href="../../styles/denim.css" type="css">
+  <template>
+    
+    <api-chart type="cars_count" options='{"title": "Cars count" }'></api-chart>
+    <api-chart type="views_delta" options='{"title": "Cars views"}'></api-chart>
+    <api-chart type="users_count" options='{"title": "Registered users"}'></api-chart>
+    <api-chart type="private_cars_count" options='{"title": "Private cars count"}'></api-chart>
+    <api-chart type="comments_count" options='{"title": "Total comments"}'></api-chart>
+    
+    <br clear="both">
+      
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'site-stats',
+      });
+    })();
+  </script>
+</dom-module>

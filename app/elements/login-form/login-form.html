@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../elements/api-request/api-request.html">
+
+<dom-module id="login-form">
+<link rel="import" href="../../styles/denim.css" type="css">
+  <template>
+    <style include="shared-styles">
+
+    </style>
+
+    <paper-input id='login' label='You name'></paper-input>
+    <paper-input id='password' label='Password' char-counter type="password"></paper-input>
+    <br>
+    <paper-button raised class="custom primary" on-tap="login">
+      <iron-icon icon="communication:vpn-key"></iron-icon>
+      Let me in!
+    </paper-button>
+    
+    <api-request
+      id='api'
+      act=""
+      on-response="getToken"
+      >
+    </api-request>
+    
+  </template>
+
+  <script>
+    (function() {
+      
+      Polymer({
+        is: 'login-form',
+
+        properties: {
+
+        },
+        
+        login: function() {
+          this.$.api.act = "login/" + this.$.login.value + this.$.password.value;
+          console.log('Requesting token... ');
+          this.$.api.run();
+          
+        },
+        
+        getToken: function(r) {
+	        if (r.detail.error != undefined) {
+		        alert(r.detail.error);
+	        }
+	        else {
+		        localStorage.setItem('token', r.detail.token);
+				app.route = 'home';
+	        }
+          
+        }
+      });
+    })();
+  </script>
+</dom-module>

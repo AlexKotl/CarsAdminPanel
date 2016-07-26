@@ -1,0 +1,35 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../elements/users/user-item.html">
+<link rel="import" href="../../elements/api-request/api-request.html">
+
+<dom-module id="users-list">
+  <template>
+    <style>
+
+
+    </style>
+
+  	<api-request 
+      id='api'
+      act='users/list' 
+      response='{{ajaxResponse2}}'>
+      
+    </api-request>
+    <template is="dom-repeat" items="[[ajaxResponse2]]">
+    	<user-item name="[[item.name]]" userid="[[item.id]]" email="[[item.email]]" cars_count="[[item.cars_count]]"></user-item>
+    </template>
+	
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'users-list'
+
+        
+               
+      });
+    })();
+  </script>
+</dom-module>

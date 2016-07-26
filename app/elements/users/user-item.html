@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../elements/api-request/api-request.html">
+
+<dom-module id="user-item">
+
+<link rel="import" href="../../styles/denim.css" type="css">
+
+  <template>
+    <style>
+      :host {
+        
+      }
+      
+      paper-card {
+        --paper-card:{
+          margin:10px 10px 10px 0; width: 320px;
+        }
+        --paper-card-header:{overflow: hidden; height: 3em;}
+      }
+      
+      paper-fab {display: inline-block}
+
+    </style>
+
+  	<paper-card heading="[[name]]" id='card'  >
+  		<div class="card-content">
+  			<b>Email</b>: [[email]] <br>
+  			<b>Cars</b>: [[cars_count]]
+  		</div>
+  		<div class="card-actions">
+  			<paper-fab icon="block" title="Block" mini="mini" id='delete_but'></paper-fab>
+  			<a href="[[baseUrl]]cars/user/[[userid]]"><paper-fab icon="maps:directions-car" title="Cars" mini></paper-fab></a>
+  		</div>
+  	</paper-card>
+  	
+  	<paper-toast id="toast" text="This toast auto-closes after 3 seconds"></paper-toast>
+  	
+  	<api-request
+      id="ajax"
+      on-response="hresponse">
+    </api-request>
+    
+    <paper-dialog id='delete_dialog' >
+      <h2>Confirm action</h2>
+        <p>Are you sure you want to block this user?</p>
+      <div class="buttons">
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm id='delete'>Block</paper-button>
+      </div>
+    </paper-dialog>
+	
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'user-item',
+
+        properties: {
+          title: String,
+          email: String,
+          cars_count: String,
+          userid: String
+        },
+        
+        listeners: {
+	        'delete.tap': 'blockItem',
+	        'delete_but.tap': 'deleteDialog'
+        },
+        
+        blockItem: function() {
+          this.$.ajax.act = "users/block/" + this.userid;
+          this.$.ajax.run();
+        },
+        
+        hresponse: function(r) {
+	        console.log(r);
+          this.$.toast.text = r.detail.message;
+          this.$.toast.open();
+          if (r.detail.action == 'block') this.$.card.remove();
+        },
+        
+        deleteDialog: function() {
+          this.$.delete_dialog.toggle();
+        }
+
+        
+      });
+    })();
+  </script>
+</dom-module>

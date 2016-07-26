@@ -1,0 +1,49 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../bower_components/google-chart/google-chart.html">
+
+
+<dom-module id="api-chart">
+
+  <template>
+    <style>
+      :host {
+      }
+      
+      google-chart {
+        height: 300px;
+        width: 600px;
+        float:left;
+      }
+
+    </style>
+<!--      options='{"title": "[[type]]"}' -->
+    <google-chart
+      id='chart'
+      type='area'
+      options='[[options]]'
+      data='http://cars/api/stats/[[type]]'>
+    </google-chart>
+		
+		<paper-spinner active='{{loading}}'></paper-spinner>
+		
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'api-chart',
+
+        properties: {
+			type: String,
+			options:  Object
+        }
+        
+      });
+    })();
+    
+   
+  </script>
+</dom-module>

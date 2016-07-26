@@ -1,0 +1,48 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<!-- <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html"> -->
+<link rel="import" href="../../elements/api-request/api-request.html">
+<link rel="import" href="../../elements/editable-field/editable-field.html">
+
+<dom-module id="car-form">
+  <template>
+    <style>
+      :host {
+        
+      }
+
+    </style>
+  	
+
+    <api-request
+    auto
+      act="cars/get_fields/{{carid}}"
+      response="{{ajaxResponse}}">    
+    </api-request>
+    
+    <template is="dom-repeat" items="[[ajaxResponse]]">
+    	<editable-field name='[[item.name]]' value='[[item.value]]' title='[[item.name]]' carid=[[carid]]></editable-field>
+    </template>
+    
+    
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'car-form',
+
+        properties: {
+          carid: String
+        },
+
+         
+      });
+    })();
+  </script>
+</dom-module>

@@ -1,0 +1,52 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/mercury-paginator/mercury-paginator.html">
+
+<dom-module id="cars-list">
+	<link rel="import" href="../../styles/denim.css" type="css">
+	
+  <template>
+    <style>
+    </style>
+
+    <api-request  
+    	id='api'    
+		act="cars/list"
+		on-response="ajaxResponse"
+		response="{{carsList}}">
+	</api-request>		
+		
+	<mercury-paginator perpage="40" items="{{carsList}}"></mercury-paginator>
+    
+    <template id='carsList' is="dom-repeat" items="{{carsList}}">
+    	<car-item title="[[item.manufacturer]] [[item.model]]" image="[[item.main_image]]" carid="[[item.id]]"></car-item>
+    </template>
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'cars-list',
+
+        properties: {
+          items: {
+            type: Array,
+            notify: true
+          },
+
+        },
+        
+        ajaxResponse: function(r) {
+          var m = document.querySelector('mercury-paginator');
+          m.data = r.detail;
+        }
+        
+      });
+    })();
+    
+
+    
+   
+  </script>
+</dom-module>

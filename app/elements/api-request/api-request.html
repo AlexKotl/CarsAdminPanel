@@ -1,0 +1,92 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+
+
+<dom-module id="api-request">
+  <style>
+    :host paper-spinner {
+      position: absolute;
+      z-index: 1000;
+    }
+  </style>
+  
+  <template>
+    <iron-ajax 
+		id="ajax"
+		auto="[[auto]]"
+		url="http://cars/api/[[act]]"
+		handle-as="json"
+		headers='[[headers]]'
+		on-response="onResponse"
+		last-response="{{response}}"
+		loading="{{loading}}">
+	</iron-ajax>
+		
+	<paper-spinner active='{{loading}}'></paper-spinner>
+		
+  </template>
+
+  <script>
+    (function() {
+
+      Polymer({
+        is: 'api-request',
+        
+        properties: {
+          act: String,
+          response: {
+            type: Object,
+            notify: true,
+          },
+          auto: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            reflectToAttribute: true
+          },
+          headers: {
+	          type: Object,
+	          value: {
+		          "X-Access-Token": localStorage.getItem('token')==null ? '' : localStorage.getItem('token')
+	          }
+	      }
+        },
+        
+        getHeaders: function() {
+	        return {
+		          "X-Access-Token": localStorage.getItem('token')==null ? '' : localStorage.getItem('token')
+	          }
+        },
+        
+        run: function() {
+	       // alert(localStorage.getItem('token'));
+	      //this.$.ajax.headers = '{"x-access-token": "dfdsfds"}';
+	      this.$.ajax.headers = this.getHeaders();
+          this.$.ajax.generateRequest();
+          //console.log("running from: " + this.$.ajax.url);
+        },
+         
+		onResponse: function(r) {
+			console.log("Got responce for " + this.act);
+			if (r.detail.response.code==6) {
+				console.log('Current token: ' + localStorage.getItem('token'));
+				localStorage.removeItem('token');
+				alert('Please re-login. You have wrong token.');
+				app.route = 'login';
+			}
+			else {
+				this.fire('response', r.detail.response);
+			}
+		
+		}
+
+
+        
+      });
+    })();
+    
+   
+  </script>
+</dom-module>
